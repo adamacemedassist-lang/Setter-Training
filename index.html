@@ -579,7 +579,7 @@ let currentMod=null;
 let qState=null;
 let quizScores={q1:null,q2:null,q3:null,q4:null,q5:null};
 let onboardData={};
-const ADMIN_PWD='PScale@123$';
+async function verifyPassword(pwd){ const r=await fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:pwd})}); const d=await r.json(); return d.success===true; }
 // API keys removed — moved to Vercel server-side env variables
 // (api/chat.js and api/supabase.js handle the actual API calls)
 
@@ -2418,10 +2418,10 @@ function openManagerLogin(){
   document.getElementById('adminLoginModal').classList.remove('hidden');
 }
 
-function checkAdmin(mode){
+async function checkAdmin(mode){
   const pwd=document.getElementById('adminPwd').value;
   const err=document.getElementById('adminErr');
-  if(pwd===ADMIN_PWD){
+  if(await verifyPassword(pwd)){
     document.getElementById('adminLoginModal').classList.add('hidden');
     document.getElementById('adminPwd').value='';
     err.style.visibility='hidden';
